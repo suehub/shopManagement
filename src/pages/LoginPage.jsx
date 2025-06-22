@@ -1,21 +1,27 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login } from "../api/auth";
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const handleLogin = async (e) => {
+    try {
+      e.preventDefault();
 
-    if (id === "test" && pw === "1234") {
-      alert("로그인되었습니다.");
+      const { accessToken, refreshToken } = await login({ userId: id, password: pw });
+
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      // 메인 페이지 이동
       navigate("/dashboard/products");
-    } else {
-      setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+    } catch (err) {
+      console.log(err);
+      setError("아이디 또는 비밀번호를 확인하세요.");
     }
   };
 

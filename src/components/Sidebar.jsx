@@ -24,12 +24,12 @@ export default function Sidebar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    navigate("/login");
+    navigate("/");
   };
 
   return (
     <aside className="flex flex-col w-72 h-screen bg-[#111C44] text-white py-8">
-      <h1 className="text-[32px] text-center font-bold mb-1">VIDOVIDA</h1>
+      <h1 className="text-[32px] text-center font-bold mb-2">VIDOVIDA</h1>
       <p
         className="text-[16px] text-center mb-6 underline cursor-pointer hover:text-blue-300"
         onClick={handleLogout}
