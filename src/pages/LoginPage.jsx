@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../api/auth";
+import axios from "@/api/axiosInstance";
 
 export default function LoginPage() {
   const [id, setId] = useState("");
@@ -12,16 +12,30 @@ export default function LoginPage() {
     try {
       e.preventDefault();
 
-      const { accessToken, refreshToken } = await login({ userId: id, password: pw });
+      const res = await axios.post("/auth/login", {
+        userId: id,
+        password: pw,
+      });
 
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
+      if (res.status === 200) {
+        const { accessToken, refreshToken } = res.data;
 
-      // 메인 페이지 이동
-      navigate("/dashboard/products");
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
+        navigate("/dashboard/products");
+      }
     } catch (err) {
-      console.log(err);
-      setError("아이디 또는 비밀번호를 확인하세요.");
+      if (err.status === 401) {
+        if (err.response.data.errorCode === "USER_NOT_FOUND") {
+          setError("아이디가 존재하지 않습니다.");
+        } else if (err.response.data.errorCode === "INVALID_PASSWORD") {
+          setError("비밀번호를 확인해주세요.");
+        }
+      } else {
+        setError("아이디 또는 비밀번호를 확인하세요.");
+      }
+      console.error(err);
     }
   };
 

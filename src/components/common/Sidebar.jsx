@@ -9,6 +9,7 @@ import {
   MdAttachMoney,
   MdCheck,
 } from "react-icons/md";
+import axios from "axios";
 
 const menus = [
   { label: "상품 관리", path: "/dashboard/products", icon: MdInventory },
@@ -23,13 +24,46 @@ const menus = [
 export default function Sidebar() {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const refreshToken = localStorage.getItem("refreshToken");
+      const res = await axios.post(
+        "/api/auth/logout",
+        {
+          refreshToken: refreshToken,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (res.status === 200) {
+        alert("로그아웃되었습니다.");
+      } else {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+      }
+      navigate("/");
+    } catch (err) {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      navigate("/");
+
+      console.error(err);
+    }
   };
 
   return (
     <aside className="flex flex-col w-72 h-screen bg-[#111C44] text-white py-8">
-      <h1 className="text-[32px] text-center font-bold mb-2">VIDOVIDA</h1>
+      <h1
+        onClick={() => navigate("/dashboard/products")}
+        className="text-[32px] text-center font-bold mb-2 cursor-pointer"
+      >
+        VIDOVIDA
+      </h1>
       <p
         className="text-[16px] text-center mb-6 underline cursor-pointer hover:text-blue-300"
         onClick={handleLogout}
@@ -37,14 +71,14 @@ export default function Sidebar() {
         로그아웃
       </p>
 
-      <nav className="flex flex-col gap-2">
+      <nav className="flex flex-col">
         {menus.map((menu) => {
           const Icon = menu.icon;
           return (
             <NavLink key={menu.path} to={menu.path}>
               {({ isActive }) => (
                 <div
-                  className={`flex items-center justify-between text-[18px] my-1 py-3 px-8 hover:bg-white/10 ${
+                  className={`flex items-center justify-between text-[18px] py-4 px-8 hover:bg-white/10 ${
                     isActive ? "bg-white/20" : ""
                   }`}
                 >
