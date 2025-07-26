@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Tabs from "@radix-ui/react-tabs";
-import { MdOutlineDashboard, MdOutlineFilterAlt, MdOutlineSearch } from "react-icons/md";
+import { MdOutlineDashboard, MdOutlineSearch } from "react-icons/md";
 import { FaListUl } from "react-icons/fa";
 
 const dummyProducts = [
@@ -170,11 +170,11 @@ export default function ProductList() {
           <option value="price">가격순</option>
         </select>
 
-        <div className="relative">
+        <div className="relative w-full max-w-xs">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border h-8 pl-2 pr-8 text-sm"
+            className="border h-8 pl-2 pr-8 text-sm w-full"
             placeholder="검색"
           />
           <MdOutlineSearch className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500" />

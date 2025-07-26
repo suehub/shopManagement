@@ -16,7 +16,7 @@ const menus = [
   { label: "주문/발송 관리", path: "/dashboard/orders", icon: MdLocalShipping },
   { label: "입고 관리", path: "/dashboard/inbound", icon: MdMoveToInbox },
   { label: "반품 관리", path: "/dashboard/returns", icon: MdUndo },
-  { label: "재고 관리", path: "/dashboard/inventory", icon: MdStorage },
+  { label: "재고 관리", path: "/dashboard/variant", icon: MdStorage },
   { label: "샘플 요청 관리", path: "/dashboard/samples", icon: MdDescription },
   { label: "정산 관리", path: "/dashboard/settlement", icon: MdAttachMoney },
 ];
